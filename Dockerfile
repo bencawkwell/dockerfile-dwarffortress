@@ -29,4 +29,8 @@ RUN tar -xjf df_34_11_linux.tar.bz2
 RUN ln -s /usr/lib/i386-linux-gnu/libopenal.so.1 df_linux/libs/libopenal.so
 RUN ln -s /usr/lib/i386-linux-gnu/libsndfile.so.1 df_linux/libs/libsndfile.so
 
-ENTRYPOINT ["df_linux/df"]
+# Add DFHack
+RUN wget http://dethware.org/dfhack/download/dfhack-0.34.11-r3-Linux.tar.gz
+RUN cd df_linux && tar -xvzf ../dfhack-0.34.11-r3-Linux.tar.gz
+
+ENTRYPOINT ["df_linux/dfhack"]
