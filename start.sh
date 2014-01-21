@@ -11,11 +11,14 @@ options normally needed to be set in the init.txt config file.
 OPTIONS:
    -h      Show this message
    -p      Print mode, can be ‘2D′ or ‘TEXT′
+   -x      Execute arbitery command, used for debugging. For example passing
+           /bin/bash will give you a shell. To pass parameters simply wrap 
+           everything in single quotes (eg -x 'ls -al')
 EOF
 }
 
 PRINTMODE="2D"
-while getopts “:hp:” OPTION
+while getopts “:hp:x:” OPTION
 do
      case $OPTION in
          h)
@@ -24,6 +27,10 @@ do
              ;;
          p)
              PRINTMODE=$OPTARG
+             ;;
+         x)
+             $OPTARG
+             exit
              ;;
          ?)
              usage

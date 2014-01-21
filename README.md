@@ -23,6 +23,17 @@ In order to run in 2D mode you need to map stuff from the host to the container
     docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress
 
 
+Debugging
+---------
+
+The entrypoint is set to the start.sh bash script included in the repository. As well as allowing certain DwarfFortress init.txt options to be set using commandline parameters is also provides an additiona -x parameter which will execute any value it is provided. So as an example to get a shell instead of launching DwarfFortress you could run:
+
+    docker run -t -i DwarfFortress -x /bin/bash
+
+If you need to pass parameters use single quotes, for example to list the files in the root path of the container:
+
+    docker run -t -i DwarfFortress -x 'ls -al'
+
 Todo
 ----
 
