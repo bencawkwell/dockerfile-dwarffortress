@@ -22,6 +22,9 @@ In order to run in 2D mode you need to map stuff from the host to the container
 
     docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress
 
+To see all the options available, get help
+
+    docker run -t -i DwarfFortress -h
 
 Debugging
 ---------

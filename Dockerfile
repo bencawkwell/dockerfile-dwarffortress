@@ -33,7 +33,11 @@ RUN ln -s /usr/lib/i386-linux-gnu/libsndfile.so.1 df_linux/libs/libsndfile.so
 RUN wget http://dethware.org/dfhack/download/dfhack-0.34.11-r3-Linux.tar.gz
 RUN cd df_linux && tar -xvzf ../dfhack-0.34.11-r3-Linux.tar.gz
 
-# Custom launch script that allows setting some options in init.txt using commandline parameters
+# Custom launch script that has the following commandline parameters:
+# * -h Show help message
+# * -p set PRINT_MODE in init.txt
+# * -s Skip intro (set INTRO to NO in init.txt)
+# * -x Run arbitrary command
 ADD start.sh start.sh
 
 ENTRYPOINT ["/start.sh"]
