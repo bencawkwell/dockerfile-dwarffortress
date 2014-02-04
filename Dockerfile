@@ -8,15 +8,10 @@ RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get install -y wget nano bzip2
 
-# Fake a fuse install, thanks to Henrik Mühe (https://gist.github.com/henrik-muehe/6155333)
-RUN apt-get install libfuse2
-RUN cd /tmp ; apt-get download fuse
-RUN cd /tmp ; dpkg-deb -x fuse_* .
-RUN cd /tmp ; dpkg-deb -e fuse_*
-RUN cd /tmp ; rm fuse_*.deb
-RUN cd /tmp ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst
-RUN cd /tmp ; dpkg-deb -b . /fuse.deb
-RUN cd /tmp ; dpkg -i /fuse.deb
+# The fuse workaround, thanks to Roberto G. Hashioka (https://github.com/rogaha/docker-desktop)
+RUN apt-get -y install fuse  || :
+RUN rm -rf /var/lib/dpkg/info/fuse.postinst
+RUN apt-get -y install fuse
 
 # Install dwarf fortress dependencies
 RUN apt-get install -y --no-install-recommends ia32-libs libsdl-image1.2 libsdl-sound1.2 libsdl-ttf2.0-0

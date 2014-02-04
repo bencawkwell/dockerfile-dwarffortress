@@ -49,5 +49,6 @@ Credits
 
 * Obviously Toady One at http://www.bay12games.com for Dwarf Fortress.
 * Daniel Mizyrycki for the slideshow (http://www.slideshare.net/dotCloud/dockerizing-your-appli) that helped get started.
-* Henrik Mühe for the fuse install hack (https://gist.github.com/henrik-muehe/6155333)
+* Henrik Mühe for the first fuse install hack I tried (https://gist.github.com/henrik-muehe/6155333)
+* Roberto G. Hashioka for the current fuse install hack that seems to work better with xpra (https://github.com/rogaha/docker-desktop)
 * All the guys that maintain the Dwarf Fortress wiki (http://dwarffortresswiki.org/index.php/DF2012:Installation)
