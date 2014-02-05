@@ -51,7 +51,7 @@ RUN wget http://dethware.org/dfhack/download/dfhack-0.34.11-r3-Linux.tar.gz
 RUN cd df_linux && tar -xvzf ../dfhack-0.34.11-r3-Linux.tar.gz
 
 # Add a utility for modifying df config files via the commandline
-ADD https://raw2.github.com/bencawkwell/launch_df/master/launch_df /launch_df
+ADD https://raw2.github.com/bencawkwell/launch_df/v0.1.0/launch_df /launch_df
 RUN chmod 777 launch_df
 
 # Script that will handle running Dwarf Fortress in xpra if needed
