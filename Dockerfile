@@ -1,12 +1,10 @@
-# Base docker image
 FROM ubuntu:precise
-MAINTAINER	Ben Cawkwell <bencawkwell@gmail.com>
+MAINTAINER Ben Cawkwell <bencawkwell@gmail.com>
 
-# Common useful packages
+# Update the system
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y wget nano bzip2
 
 # The fuse workaround, thanks to Roberto G. Hashioka (https://github.com/rogaha/docker-desktop)
 RUN apt-get -y install fuse  || :
@@ -14,7 +12,7 @@ RUN rm -rf /var/lib/dpkg/info/fuse.postinst
 RUN apt-get -y install fuse
 
 # Install dwarf fortress dependencies
-RUN apt-get install -y --no-install-recommends ia32-libs libsdl-image1.2 libsdl-sound1.2 libsdl-ttf2.0-0
+RUN apt-get install -y --no-install-recommends bzip2 ia32-libs libsdl-image1.2 libsdl-sound1.2 libsdl-ttf2.0-0
 
 # Fetch and extract the game
 RUN wget http://www.bay12games.com/dwarves/df_34_11_linux.tar.bz2
