@@ -56,7 +56,7 @@ RUN unzip Phoebus_34_11v01.zip -d Phoebus
 RUN mv /Phoebus/data/init/phoebus/* /Phoebus/data/init/
 
 # Add a utility for modifying df config files via the commandline
-ADD https://raw2.github.com/bencawkwell/launch_df/v0.2.1/launch_df /launch_df
+ADD https://github.com/bencawkwell/launch_df/raw/v0.2.1/launch_df /launch_df
 RUN chmod 777 launch_df
 
 # Script that will handle running Dwarf Fortress in xpra if needed
