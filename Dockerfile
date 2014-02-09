@@ -36,7 +36,7 @@ RUN rm -rf /var/lib/dpkg/info/fuse.postinst
 RUN apt-get -y install fuse
 
 # Install dwarf fortress dependencies
-RUN apt-get install -y --no-install-recommends bzip2 ia32-libs libsdl-image1.2 libsdl-sound1.2 libsdl-ttf2.0-0
+RUN apt-get install -y --no-install-recommends unzip bzip2 ia32-libs libsdl-image1.2 libsdl-sound1.2 libsdl-ttf2.0-0
 
 # Fetch and extract the game
 RUN wget http://www.bay12games.com/dwarves/df_34_11_linux.tar.bz2
@@ -50,8 +50,13 @@ RUN ln -s /usr/lib/i386-linux-gnu/libsndfile.so.1 df_linux/libs/libsndfile.so
 RUN wget http://dethware.org/dfhack/download/dfhack-0.34.11-r3-Linux.tar.gz
 RUN cd df_linux && tar -xvzf ../dfhack-0.34.11-r3-Linux.tar.gz
 
+# Download the Phoebus tileset
+ADD http://dffd.wimbli.com/download.php?id=2430&f=Phoebus_34_11v01.zip /Phoebus_34_11v01.zip
+RUN unzip Phoebus_34_11v01.zip -d Phoebus
+RUN mv /Phoebus/data/init/phoebus/* /Phoebus/data/init/
+
 # Add a utility for modifying df config files via the commandline
-ADD https://raw2.github.com/bencawkwell/launch_df/v0.1.0/launch_df /launch_df
+ADD https://raw2.github.com/bencawkwell/launch_df/v0.2.1/launch_df /launch_df
 RUN chmod 777 launch_df
 
 # Script that will handle running Dwarf Fortress in xpra if needed

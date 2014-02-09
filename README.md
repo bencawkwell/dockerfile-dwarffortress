@@ -38,6 +38,10 @@ DfHack is included in the container, to use it simply replace the path to df wit
 
     docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress /df_linux/dfhack
 
+The Phoebus tile set is also included, you can use it by passing the -t option:
+
+    docker run -i -t -p 1022:22 DwarfFortress -t /Phoebus /df_linux/df
+
 To see all the options available, get help
 
     docker run -t -i DwarfFortress -h
@@ -46,8 +50,8 @@ Todo
 ----
 
 * There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this.
-* Add some common tile-sets or
-* Use the lazy newb pack (http://www.bay12forums.com/smf/index.php?topic=130792)
+* Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus.
+* Add some more tile sets.
 * Implement some practical way to keep saved games.
 * Ideally remove the start.sh script again to keep the Dockerfile self contained.
 
