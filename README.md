@@ -16,11 +16,11 @@ Build the image and tag it DwarfFortress. The -rm options cleans the cache after
 
 If you want to run in text mode
 
-    docker run -t -i DwarfFortress -p TEXT df_linux/df
+    docker run -t -i DwarfFortress -p TEXT /df_linux/df
 
 In order to run in 2D mode you have two choices. The first is to map stuff from the host to the container
 
-    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress df_linux/df
+    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress /df_linux/df
 
 When prompted to continue without xpra, hit y.
 
@@ -36,7 +36,7 @@ Bear in mind that the default version of xpra included in the Ubuntu repositorie
 
 DfHack is included in the container, to use it simply replace the path to df with the path to dfhack
 
-    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress df_linux/dfhack
+    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress /df_linux/dfhack
 
 To see all the options available, get help
 
