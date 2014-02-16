@@ -35,8 +35,8 @@ RUN apt-get -y install fuse  || :
 RUN rm -rf /var/lib/dpkg/info/fuse.postinst
 RUN apt-get -y install fuse
 
-# Install dwarf fortress dependencies
-RUN apt-get install -y --no-install-recommends unzip bzip2 ia32-libs libsdl-image1.2 libsdl-sound1.2 libsdl-ttf2.0-0
+# Install dwarf fortress dependencies (libgl1-mesa-swrast has to be installed separately otherwise we get an dpkg dependency issue on configuration)
+RUN apt-get install -y --no-install-recommends unzip bzip2 ia32-libs libsdl-image1.2 libsdl-sound1.2 libsdl-ttf2.0-0 libjpeg62:i386 && apt-get install -y libgl1-mesa-swrast libgl1-mesa-swrast:i386
 
 # Fetch and extract the game
 RUN wget http://www.bay12games.com/dwarves/df_34_11_linux.tar.bz2
