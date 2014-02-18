@@ -42,6 +42,14 @@ The Phoebus tile set is also included, you can use it by passing the -t option:
 
     docker run -i -t -p 1022:22 DwarfFortress -t /Phoebus /df_linux/df
 
+The easiest way to keep your saved games between container restarts is to use dockers -v option to map a directory on your host to the save directory inside the container. The following example will mean any saves you make in the game will end up in the directory /tmp/save:
+
+    docker run -i -t -p 1022:22 -v /tmp/save/:/df_linux/data/save/ DwarfFortress /df_linux/df
+
+Remember to make the directory readable and ensure it has plenty of disk space, since there is a known issue in Dwarf Fortress that it will pretend to save successfully even if it has not.
+
+It is also possible to use Data Volume Containers, see the docker website for more details: http://docs.docker.io/en/latest/use/working_with_volumes/#creating-and-mounting-a-data-volume-container
+
 To see all the options available, get help
 
     docker run -t -i DwarfFortress -h
@@ -52,7 +60,7 @@ Todo
 * There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this.
 * Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus.
 * Add some more tile sets.
-* Implement some practical way to keep saved games.
+* Document a cool way to keep saved games in Data Volume Containers.
 * Ideally remove the start.sh script again to keep the Dockerfile self contained.
 
 Credits

@@ -50,6 +50,10 @@ RUN ln -s /usr/lib/i386-linux-gnu/libsndfile.so.1 df_linux/libs/libsndfile.so
 RUN wget http://dethware.org/dfhack/download/dfhack-0.34.11-r3-Linux.tar.gz
 RUN cd df_linux && tar -xvzf ../dfhack-0.34.11-r3-Linux.tar.gz
 
+# Setup the save directory
+RUN mkdir /df_linux/data/save
+RUN chmod 777 /df_linux/data/save
+
 # Download the Phoebus tileset
 ADD http://dffd.wimbli.com/download.php?id=2430&f=Phoebus_34_11v01.zip /Phoebus_34_11v01.zip
 RUN unzip Phoebus_34_11v01.zip -d Phoebus
@@ -63,5 +67,6 @@ RUN chmod 777 launch_df
 ADD start.sh /start.sh
 
 EXPOSE 22
+VOLUME ["/df_linux/data/save"]
 ENTRYPOINT ["/start.sh"]
 CMD ["-h"]
