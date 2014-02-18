@@ -57,11 +57,14 @@ To see all the options available, get help
 Todo
 ----
 
-* There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this.
+* There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this. The workaround is to change the encoding to "RAW RGB + zlib".
 * Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus.
 * Add some more tile sets.
 * Document a cool way to keep saved games in Data Volume Containers.
 * Ideally remove the start.sh script again to keep the Dockerfile self contained.
+* Simplify using world gen parameters, for example traverse a directory for world gen parameter files and automatically append them to the data/init/world_gen.txt file.
+* Fix sound when using xpra.
+* Create a tutorial version, or have it optional to load a tutorial map by passing arguments. I personally found http://dftutorial.wordpress.com really helpful but unfortunately its for the older 0.31.25 version of Dwarf Fortress and I was unable to get the saved game to work in 0.34.11. The second challenge is that the files are hosted on MediaFire which might be tricky to automate in a script/Dockerfile, so I would either need to ask that the files are hosted on dffd.wimbli.com or include the files in the github repo, but then there is a licensing issue.
 
 Credits
 -------
