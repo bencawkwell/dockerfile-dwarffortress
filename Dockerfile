@@ -59,8 +59,12 @@ ADD http://dffd.wimbli.com/download.php?id=2430&f=Phoebus_34_11v01.zip /Phoebus_
 RUN unzip Phoebus_34_11v01.zip -d Phoebus
 RUN mv /Phoebus/data/init/phoebus/* /Phoebus/data/init/
 
+# Download the Mike Mayday tileset
+ADD http://dffd.wimbli.com/download.php?id=7025&f=Mayday+34.11.zip /Mayday+34.11.zip
+RUN unzip Mayday+34.11.zip
+
 # Add a utility for modifying df config files via the commandline
-ADD https://github.com/bencawkwell/launch_df/raw/v0.2.1/launch_df /launch_df
+ADD https://github.com/bencawkwell/launch_df/raw/v0.2.2/launch_df /launch_df
 RUN chmod 777 launch_df
 
 # Script that will handle running Dwarf Fortress in xpra if needed

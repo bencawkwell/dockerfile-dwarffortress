@@ -38,7 +38,7 @@ DfHack is included in the container, to use it simply replace the path to df wit
 
     docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress /df_linux/dfhack
 
-The Phoebus tile set is also included, you can use it by passing the -t option:
+The Phoebus and Mayday tile sets are also included, you can use one of them by passing the -t option and specifying the name (case sensitive) prefixed with a slash, for example:
 
     docker run -i -t -p 1022:22 DwarfFortress -t /Phoebus /df_linux/df
 
@@ -58,7 +58,7 @@ Todo
 ----
 
 * There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this. The workaround is to change the encoding to "RAW RGB + zlib".
-* Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus.
+* Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus and it would be even better if it was not case sensitive.
 * Add some more tile sets.
 * Document a cool way to keep saved games in Data Volume Containers.
 * Ideally remove the start.sh script again to keep the Dockerfile self contained.
