@@ -34,13 +34,19 @@ Both sshd and xpra will be started, and then it will wait for you to hit a key b
 
 Bear in mind that the default version of xpra included in the Ubuntu repositories is usually really old. I would recommend installing the latest version from http://winswitch.org/downloads/
 
+### DfHack ###
+
 DfHack is included in the container, to use it simply replace the path to df with the path to dfhack
 
     docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress /df_linux/dfhack
 
+### Tile sets ###
+
 The Phoebus and Mayday tile sets are also included, you can use one of them by passing the -t option and specifying the name (case sensitive) prefixed with a slash, for example:
 
     docker run -i -t -p 1022:22 DwarfFortress -t /Phoebus /df_linux/df
+
+### Saved Games ###
 
 The easiest way to keep your saved games between container restarts is to use dockers -v option to map a directory on your host to the save directory inside the container. The following example will mean any saves you make in the game will end up in the directory /tmp/save:
 
@@ -49,6 +55,19 @@ The easiest way to keep your saved games between container restarts is to use do
 Remember to make the directory readable and ensure it has plenty of disk space, since there is a known issue in Dwarf Fortress that it will pretend to save successfully even if it has not.
 
 It is also possible to use Data Volume Containers, see the docker website for more details: http://docs.docker.io/en/latest/use/working_with_volumes/#creating-and-mounting-a-data-volume-container
+
+### Auto backup of Saved Games ###
+
+Since you can only have one saved version of a fortress, and I sometimes make silly mistakes that I do not notice until several days later, I got into the habit of making backups of the data/save directory on a regular basis. To automate this I have found a script by Nevik Rehnel which monitors a directory and on each change automatically makes a commit of it. Using git you can then recover older saves from before you accidentally left a hole into you forts defenses which you only notice after an entire hoard of goblins discover it.
+
+If you want to make use of this feature then simply initiate a git repository in the folder you are storing saves. For example assuming you are using /tmp/save on your host:
+
+    cd /tmp/save
+    git init
+
+When the docker container is started it will check if the save directory has the hidden .git directory, and if it does it will start up gitwatch utility to monitor it. Note that I have set the waiting period to 1 minute before gitwatch will commit the changes. This is to give Dwarf Fortress ample time to finish the save before the save gets committed.
+
+### Other options ###
 
 To see all the options available, get help
 
@@ -61,8 +80,8 @@ Todo
 * Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus and it would be even better if it was not case sensitive.
 * Add some more tile sets.
 * Document a cool way to keep saved games in Data Volume Containers.
-* Ideally remove the start.sh script again to keep the Dockerfile self contained.
-* Simplify using world gen parameters, for example traverse a directory for world gen parameter files and automatically append them to the data/init/world_gen.txt file.
+* Ideally remove the start.sh script again to keep the Dockerfile self contained, or break out all the extra feature I keep adding like auto backup and tile sets into plugins so that its easier to customise or add new features.
+* Simplify using world gen parameters, for example traverse a directory for world gen parameter files and automatically append them to the data/init/world_gen.txt file. Again this could be written as a plugin.
 * Fix sound when using xpra.
 * Create a tutorial version, or have it optional to load a tutorial map by passing arguments. I personally found http://dftutorial.wordpress.com really helpful but unfortunately its for the older 0.31.25 version of Dwarf Fortress and I was unable to get the saved game to work in 0.34.11. The second challenge is that the files are hosted on MediaFire which might be tricky to automate in a script/Dockerfile, so I would either need to ask that the files are hosted on dffd.wimbli.com or include the files in the github repo, but then there is a licensing issue.
 
@@ -74,3 +93,4 @@ Credits
 * Henrik Mühe for the first fuse install hack I tried (https://gist.github.com/henrik-muehe/6155333)
 * Roberto G. Hashioka for the current fuse install hack that seems to work better with xpra (https://github.com/rogaha/docker-desktop)
 * All the guys that maintain the Dwarf Fortress wiki (http://dwarffortresswiki.org/index.php/DF2012:Installation)
+* Nevik Rehnel for gitwatch (https://github.com/nevik/gitwatch)

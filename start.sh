@@ -14,6 +14,15 @@ do
     esac
 done
 
+/usr/bin/supervisord
+
+# Enable auto backups using gitwatch of the save directory is a git repo
+if [ -d "/df_linux/data/save/.git" ] ; then
+    grep -q 'current' /df_linux/data/save/.gitignore || echo 'current' >> /df_linux/data/save/.gitignore
+    grep -q '*/raw' /df_linux/data/save/.gitignore || echo '*/raw' >> /df_linux/data/save/.gitignore
+    /usr/bin/supervisorctl start gitwatch
+fi
+
 # First if print mode is text we can just launch
 if [[ $PRINTMODE == "TEXT" ]]; then
     /launch_df "$@"
@@ -39,7 +48,6 @@ if [ "$DISPLAY" != "" ] ; then
 fi
 
 # At this point we assume xpra is required so we launch in that
-/usr/bin/supervisord
 /wait-for-daemons.sh xpra sshd
 echo 'use the following command to connect: xpra attach --ssh=\"ssh -p PORT\" ssh:xpra@HOST:100'
 read -p 'Press any key to launch Dwarf Fortress...'

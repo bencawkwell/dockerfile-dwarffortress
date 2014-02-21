@@ -67,6 +67,12 @@ RUN unzip Mayday+34.11.zip
 ADD https://github.com/bencawkwell/launch_df/raw/v0.2.2/launch_df /launch_df
 RUN chmod 777 launch_df
 
+# Add a utility for watching directories and committing them using git automatically
+ADD https://github.com/bencawkwell/gitwatch/raw/master/gitwatch.sh /gitwatch.sh
+RUN apt-get install -y git gitk inotify-tools
+RUN chmod +x /gitwatch.sh
+RUN /bin/echo -e "[program:gitwatch] \ncommand=/gitwatch.sh -s 60 /df_linux/data/save \nautostart=false" > /etc/supervisor/conf.d/gitwatch.conf
+
 # Script that will handle running Dwarf Fortress in xpra if needed
 ADD start.sh /start.sh
 
