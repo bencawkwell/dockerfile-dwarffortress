@@ -76,6 +76,7 @@ RUN /bin/echo -e "[program:gitwatch] \ncommand=/gitwatch.sh -s 60 /df_linux/data
 # Script that will handle running Dwarf Fortress in xpra if needed
 ADD start.sh /start.sh
 
+ENV LANG C.UTF-8
 EXPOSE 22
 VOLUME ["/df_linux/data/save"]
 ENTRYPOINT ["/start.sh"]
