@@ -10,23 +10,23 @@ Make sure you are in the same directory as the Dockerfile
 
     cd dockerfile-dwarffortress
 
-Build the image and tag it DwarfFortress. The -rm options cleans the cache after the final image has been created.
+Build the image and tag it dwarffortress. The -rm options cleans the cache after the final image has been created.
 
-    docker build -t DwarfFortress -rm .
+    docker build -t dwarffortress -rm .
 
 If you want to run in text mode
 
-    docker run -t -i DwarfFortress -p TEXT /df_linux/df
+    docker run -t -i dwarffortress -p TEXT /df_linux/df
 
 In order to run in 2D mode you have two choices. The first is to map stuff from the host to the container
 
-    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress /df_linux/df
+    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY dwarffortress /df_linux/df
 
 When prompted to continue without xpra, hit y.
 
 The other option is to connect to the container using xpra. The advantage of this approach is you can connect from a different machine to where the container is running. Since xpra runs over ssh you need to map port 22 from the container to a port on your host.
 
-    docker run -i -t -p 1022:22 DwarfFortress /df_linux/df
+    docker run -i -t -p 1022:22 dwarffortress /df_linux/df
 
 Both sshd and xpra will be started, and then it will wait for you to hit a key before launching Dwarf Fortress. This is to give you time to connect so that you do not miss the really cool intro. Assuming you used the above command to start the container you can use the following to connect from the same machine. The password is changeme.
 
@@ -38,19 +38,19 @@ Bear in mind that the default version of xpra included in the Ubuntu repositorie
 
 DfHack is included in the container, to use it simply replace the path to df with the path to dfhack
 
-    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY DwarfFortress /df_linux/dfhack
+    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY dwarffortress /df_linux/dfhack
 
 ### Tile sets ###
 
 The Phoebus and Mayday tile sets are also included, you can use one of them by passing the -t option and specifying the name (case sensitive) prefixed with a slash, for example:
 
-    docker run -i -t -p 1022:22 DwarfFortress -t /Phoebus /df_linux/df
+    docker run -i -t -p 1022:22 dwarffortress -t /Phoebus /df_linux/df
 
 ### Saved Games ###
 
 The easiest way to keep your saved games between container restarts is to use dockers -v option to map a directory on your host to the save directory inside the container. The following example will mean any saves you make in the game will end up in the directory /tmp/save:
 
-    docker run -i -t -p 1022:22 -v /tmp/save/:/df_linux/data/save/ DwarfFortress /df_linux/df
+    docker run -i -t -p 1022:22 -v /tmp/save/:/df_linux/data/save/ dwarffortress /df_linux/df
 
 Remember to make the directory readable and ensure it has plenty of disk space, since there is a known issue in Dwarf Fortress that it will pretend to save successfully even if it has not.
 
@@ -71,7 +71,7 @@ When the docker container is started it will check if the save directory has the
 
 To see all the options available, get help
 
-    docker run -t -i DwarfFortress -h
+    docker run -t -i dwarffortress -h
 
 Todo
 ----
