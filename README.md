@@ -73,16 +73,19 @@ To see all the options available, get help
 
     docker run -t -i dwarffortress -h
 
+Known Issues
+------------
+* There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this. The workaround is to change the encoding to "RAW RGB + zlib".
+* No sound when using xpra.
+* Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus and it would be even better if it was not case sensitive.
+
 Todo
 ----
-
-* There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this. The workaround is to change the encoding to "RAW RGB + zlib".
-* Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus and it would be even better if it was not case sensitive.
+* I plan to use ansible (http://www.ansible.com) for installing packages etc. rather than have such a complicated docker file. Then features like auto backup and tilesets can be seperated into their own roles or playbooks, making them easier to maintain.
+* Use the latest version of Dwarf Fortress.
 * Add some more tile sets.
 * Document a cool way to keep saved games in Data Volume Containers.
-* Ideally remove the start.sh script again to keep the Dockerfile self contained, or break out all the extra feature I keep adding like auto backup and tile sets into plugins so that its easier to customise or add new features.
-* Simplify using world gen parameters, for example traverse a directory for world gen parameter files and automatically append them to the data/init/world_gen.txt file. Again this could be written as a plugin.
-* Fix sound when using xpra.
+* Simplify using world gen parameters, for example traverse a directory for world gen parameter files and automatically append them to the data/init/world_gen.txt file. Again this could be written as a ansible role of playbook.
 * Create a tutorial version, or have it optional to load a tutorial map by passing arguments. I personally found http://dftutorial.wordpress.com really helpful but unfortunately its for the older 0.31.25 version of Dwarf Fortress and I was unable to get the saved game to work in 0.34.11. The second challenge is that the files are hosted on MediaFire which might be tricky to automate in a script/Dockerfile, so I would either need to ask that the files are hosted on dffd.wimbli.com or include the files in the github repo, but then there is a licensing issue.
 
 Credits
