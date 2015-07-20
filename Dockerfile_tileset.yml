@@ -1,0 +1,8 @@
+FROM busybox:latest
+MAINTAINER Sean Chitwood <darkmane@gmail.com>
+
+ADD setup_tileset.sh /tmp/setup_tileset.sh
+RUN chmod +x /tmp/setup_tileset.sh
+RUN ["/tmp/setup_tileset.sh"]
+
+CMD /bin/true

@@ -28,7 +28,7 @@ chsh -s /bin/bash xpra
 /bin/echo -e "[program:xpra] \ncommand=xpra start --no-daemon :100 \nuser=xpra \nenvironment=HOME=\"/home/xpra\" \n" > /etc/supervisor/conf.d/xpra.conf
 
 # Fetch a utility for pausing bash scripts until supervisord has finished starting programs
-curl -O https://github.com/bencawkwell/supervisor-tools/raw/master/wait-for-daemons.sh 
+curl -LO https://github.com/bencawkwell/supervisor-tools/raw/master/wait-for-daemons.sh 
 chmod +x wait-for-daemons.sh
 
 # The fuse workaround, thanks to Roberto G. Hashioka (https://github.com/rogaha/docker-desktop)
@@ -42,6 +42,7 @@ apt-get install -y --no-install-recommends unzip bzip2 ia32-libs libsdl-image1.2
 # Fetch and extract the game
 curl --retry 3 -OL http://www.bay12games.com/dwarves/df_$(echo $DF_MAJORVERSION)_$(echo $DF_MINORVERSION)_linux.tar.bz2
 tar -xjf df_$(echo $DF_MAJORVERSION)_$(echo $DF_MINORVERSION)_linux.tar.bz2
+rm df_$(echo $DF_MAJORVERSION)_$(echo $DF_MINORVERSION)_linux.tar.bz2
 
 # Fix OpenAl error
 ln -s /usr/lib/i386-linux-gnu/libopenal.so.1 df_linux/libs/libopenal.so
@@ -56,21 +57,27 @@ rm dfhack-0.34.11-r3-Linux.tar.gz
 mkdir /df_linux/data/save
 chmod 777 /df_linux/data/save
 
+# Setup the save directory
+mkdir -p /tilesets
+chmod 777 /tilesets
+
 # Download the Phoebus tileset
-curl --retry 3 -Lo Phoebus_34_11v01.zip http://dffd.wimbli.com/download.php\?id=2430\&f=Phoebus_34_11v01.zip
-ls -Al
-unzip Phoebus_34_11v01.zip -d /Phoebus
-mv /Phoebus/data/init/phoebus/* /Phoebus/data/init/
+wget -O Phoebus_34_11v01.zip http://dffd.wimbli.com/download.php\?id=2430\&f=Phoebus_34_11v01.zip
+mkdir /tilesets/Phoebus
+unzip Phoebus_34_11v01.zip -d /tilesets/Phoebus
+mv /tilesets/Phoebus/data/init/phoebus/* /tilesets/Phoebus/data/init/
 rm Phoebus_34_11v01.zip 
 
 # Download the Mike Mayday tileset
-curl --retry 3 -Lo Mayday+34.11.zip http://dffd.wimbli.com/download.php?id=7025\&f=Mayday+34.11.zip
-unzip Mayday+34.11.zip
+wget -O Mayday+34.11.zip http://dffd.wimbli.com/download.php?id=7025\&f=Mayday+34.11.zip
+unzip Mayday+34.11.zip -d /tilesets
 rm Mayday+34.11.zip
 
 # Add a utility for modifying df config files via the commandline
+pushd /
 curl --retry 3 -LO https://github.com/bencawkwell/launch_df/raw/v0.2.2/launch_df
 chmod +x launch_df
+popd
 
 # Add a utility for watching directories and committing them using git automatically
 curl --retry 3 -O https://github.com/bencawkwell/gitwatch/raw/master/gitwatch.sh
