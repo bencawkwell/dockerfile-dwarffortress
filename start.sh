@@ -2,6 +2,18 @@
 
 
 /usr/bin/supervisord
+set -x
+
+chown xpra:xpra /home/xpra/.ssh
+chown -R xpra:xpra /home/xpra/.ssh
+chgrp -R xpra:xpra /home/xpra/.ssh
+chmod 700 /home/xpra/.ssh
+if [[ -e /home/xpra/.ssh/authorized_keys ]]; then
+   chmod 600 /home/xpra/.ssh/authorized_keys
+fi
+
+echo 'Available Tilesetsi (use -e TILESET=<name>):'
+ls /tilesets
 
 tileswitch="-t /tilesets/$TILESET"
 if [[ "$TILESET" == "" || ! -d "/tilesets/$TILESET" ]]; then

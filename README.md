@@ -1,10 +1,11 @@
 dockerfile-dwarffortress
 ========================
 
-Dwarf Fortress in a container. Tested on Mint 15 and 16.
+Dwarf Fortress in a container. Previously Tested on Mint 15 and 16, now on Mac OS X.
 
-Usage
------
+
+Building
+--------
 
 Make sure you are in the same directory as the Dockerfile
 
@@ -14,79 +15,92 @@ Build the image and tag it dwarffortress. The -rm options cleans the cache after
 
     docker build -t dwarffortress -rm .
 
-If you want to run in text mode
 
-    docker run -t -i dwarffortress -p TEXT /df_linux/df
+However this has been pushed to the Docker hub, so you can just use the existing copy.
 
-In order to run in 2D mode you have two choices. The first is to map stuff from the host to the container
+Running
+-------
 
-    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY dwarffortress /df_linux/df
+Environment Variables
+=====================
 
-When prompted to continue without xpra, hit y.
+PRINTMODE: How the game is accessed:
+  * XPRA (Default): Xpra over ssh. 
 
-The other option is to connect to the container using xpra. The advantage of this approach is you can connect from a different machine to where the container is running. Since xpra runs over ssh you need to map port 22 from the container to a port on your host.
+This is not secure enough to be put on the internet, it does not use publickey exchange to authenticate and falls back to password (default: changeme)
 
-    docker run -i -t -p 1022:22 dwarffortress /df_linux/df
+  docker run -e TILESET=Phoebus dwarffortress:latest
 
-Both sshd and xpra will be started, and then it will wait for you to hit a key before launching Dwarf Fortress. This is to give you time to connect so that you do not miss the really cool intro. Assuming you used the above command to start the container you can use the following to connect from the same machine. The password is changeme.
+      If you wish to connect over the network rather than from the host to the container, you will have to map a port from the container to the host. 
 
-     xpra attach --ssh="ssh -p 1022" ssh:xpra@localhost:100
+  docker run -e TILESET=Phoebus -p 1022:22 dwarffortress:latest
 
-Bear in mind that the default version of xpra included in the Ubuntu repositories is usually really old. I would recommend installing the latest version from http://winswitch.org/downloads/
 
-### DfHack ###
 
-DfHack is included in the container, to use it simply replace the path to df with the path to dfhack
+  * X11 : Only works when running locally, maps docker files from the host to the container.
 
-    docker run -t -i -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY dwarffortress /df_linux/dfhack
+  docker run -e PRINTMODE=X11 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY dwarffortress
 
-### Tile sets ###
+  * TEXT : This allows running inside the same terminal window you start in, however I find that not all the keys work so navigation is problematic.
 
-The Phoebus and Mayday tile sets are also included, you can use one of them by passing the -t option and specifying the name (case sensitive) prefixed with a slash, for example:
+  docker run -it -e PRINTMODE=TEXT dwarffortress:latest
 
-    docker run -i -t -p 1022:22 dwarffortress -t /Phoebus /df_linux/df
+
+TILESET: Defines the tileset used. Currently only Phoebus and Mayday+34.11 are available
+
+* docker run -e TILESET=Phoebus dwarffortress:latest 
+* docker run -e TILESET=Mayday+34.11 dwarffortress:latest 
+
+
+DFHACK: Uses Dfhack rather than the vanilla df
+
+docker run -e DFHACK=True dwarffortress:latest
 
 ### Saved Games ###
 
+If you do not specify a way to save the game, quitting DF will lose your game.
+
 The easiest way to keep your saved games between container restarts is to use dockers -v option to map a directory on your host to the save directory inside the container. The following example will mean any saves you make in the game will end up in the directory /tmp/save:
 
-    docker run -i -t -p 1022:22 -v /tmp/save/:/df_linux/data/save/ dwarffortress /df_linux/df
+    docker run -i -t -p 1022:22 -v /tmp/save/:/df_linux/data/save/ dwarffortress
+
 
 Remember to make the directory readable and ensure it has plenty of disk space, since there is a known issue in Dwarf Fortress that it will pretend to save successfully even if it has not.
 
 It is also possible to use Data Volume Containers, see the docker website for more details: http://docs.docker.io/en/latest/use/working_with_volumes/#creating-and-mounting-a-data-volume-container
 
-### Auto backup of Saved Games ###
 
-Since you can only have one saved version of a fortress, and I sometimes make silly mistakes that I do not notice until several days later, I got into the habit of making backups of the data/save directory on a regular basis. To automate this I have found a script by Nevik Rehnel which monitors a directory and on each change automatically makes a commit of it. Using git you can then recover older saves from before you accidentally left a hole into you forts defenses which you only notice after an entire hoard of goblins discover it.
+### Adding Tile sets ###
 
-If you want to make use of this feature then simply initiate a git repository in the folder you are storing saves. For example assuming you are using /tmp/save on your host:
+To add more tileset you will have to create a Data Volume Container
 
-    cd /tmp/save
-    git init
+ * Create a directory that contains all the tilesets you want to use
 
-When the docker container is started it will check if the save directory has the hidden .git directory, and if it does it will start up gitwatch utility to monitor it. Note that I have set the waiting period to 1 minute before gitwatch will commit the changes. This is to give Dwarf Fortress ample time to finish the save before the save gets committed.
+ * Creating the container:
 
-### Other options ###
+   docker create -v <Tileset directory>:/tilesets --name=df_tiles tianon/true /bin/true
 
-To see all the options available, get help
+ * Using the tiles:
 
-    docker run -t -i dwarffortress -h
+   docker run -e TILESET=<Tileset directory> --volumes-from=df_tiles dwarffortress:latest  
+
+### Using a custom init.txt ###
+
+   docker run  -v <path to init.txt>:/df_linux/data/init/init.txt dwarffortress:40.24
 
 Known Issues
 ------------
 * There seems to be an issue with parts of the screen are the wrong colour or goes blurry when using xpra. Need to investigate whether some settings could fix this. The workaround is to change the encoding to "RAW RGB + zlib".
 * No sound when using xpra.
-* Clean up the entry point argument handling to be simpler. Its a bit annoying to have to use /Phoebus instead of just Phoebus and it would be even better if it was not case sensitive.
 
 Todo
 ----
-* I plan to use ansible (http://www.ansible.com) for installing packages etc. rather than have such a complicated docker file. Then features like auto backup and tilesets can be seperated into their own roles or playbooks, making them easier to maintain.
-* Use the latest version of Dwarf Fortress.
-* Add some more tile sets.
-* Document a cool way to keep saved games in Data Volume Containers.
-* Simplify using world gen parameters, for example traverse a directory for world gen parameter files and automatically append them to the data/init/world_gen.txt file. Again this could be written as a ansible role of playbook.
-* Create a tutorial version, or have it optional to load a tutorial map by passing arguments. I personally found http://dftutorial.wordpress.com really helpful but unfortunately its for the older 0.31.25 version of Dwarf Fortress and I was unable to get the saved game to work in 0.34.11. The second challenge is that the files are hosted on MediaFire which might be tricky to automate in a script/Dockerfile, so I would either need to ask that the files are hosted on dffd.wimbli.com or include the files in the github repo, but then there is a licensing issue.
+
+* Improve XPRA support to turn off password authentication
+* Create more tags/versions (Originally this was for 34.11, so I should add that one at least)
+* Finish the setup_tileset.sh script to accept a tileset name and pull that down, so it can be used to create an data image with the tilesets people want
+* Find a way to share out saved games.
+
 
 Credits
 -------
