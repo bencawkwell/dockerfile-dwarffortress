@@ -29,21 +29,19 @@ PRINTMODE: How the game is accessed:
 
 This is not secure enough to be put on the internet, it does not use publickey exchange to authenticate and falls back to password (default: changeme)
 
-  docker run -e TILESET=Phoebus dwarffortress:latest
+    docker run -e TILESET=Phoebus dwarffortress:latest
 
-      If you wish to connect over the network rather than from the host to the container, you will have to map a port from the container to the host. 
+If you wish to connect over the network rather than from the host to the container, you will have to map a port from the container to the host. 
 
-  docker run -e TILESET=Phoebus -p 1022:22 dwarffortress:latest
-
-
+    docker run -e TILESET=Phoebus -p 1022:22 dwarffortress:latest
 
   * X11 : Only works when running locally, maps docker files from the host to the container.
 
-  docker run -e PRINTMODE=X11 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY dwarffortress
+    docker run -e PRINTMODE=X11 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd -lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' -e DISPLAY=unix$DISPLAY dwarffortress
 
   * TEXT : This allows running inside the same terminal window you start in, however I find that not all the keys work so navigation is problematic.
 
-  docker run -it -e PRINTMODE=TEXT dwarffortress:latest
+    docker run -it -e PRINTMODE=TEXT dwarffortress:latest
 
 
 TILESET: Defines the tileset used. Currently only Phoebus and Mayday+34.11 are available
@@ -54,7 +52,7 @@ TILESET: Defines the tileset used. Currently only Phoebus and Mayday+34.11 are a
 
 DFHACK: Uses Dfhack rather than the vanilla df
 
-docker run -e DFHACK=True dwarffortress:latest
+    docker run -e DFHACK=True dwarffortress:latest
 
 ### Saved Games ###
 
@@ -63,7 +61,6 @@ If you do not specify a way to save the game, quitting DF will lose your game.
 The easiest way to keep your saved games between container restarts is to use dockers -v option to map a directory on your host to the save directory inside the container. The following example will mean any saves you make in the game will end up in the directory /tmp/save:
 
     docker run -i -t -p 1022:22 -v /tmp/save/:/df_linux/data/save/ dwarffortress
-
 
 Remember to make the directory readable and ensure it has plenty of disk space, since there is a known issue in Dwarf Fortress that it will pretend to save successfully even if it has not.
 
@@ -78,15 +75,15 @@ To add more tileset you will have to create a Data Volume Container
 
  * Creating the container:
 
-   docker create -v <Tileset directory>:/tilesets --name=df_tiles tianon/true /bin/true
+    docker create -v <Tileset directory>:/tilesets --name=df_tiles tianon/true /bin/true
 
  * Using the tiles:
 
-   docker run -e TILESET=<Tileset directory> --volumes-from=df_tiles dwarffortress:latest  
+    docker run -e TILESET=<Tileset directory> --volumes-from=df_tiles dwarffortress:latest  
 
 ### Using a custom init.txt ###
 
-   docker run  -v <path to init.txt>:/df_linux/data/init/init.txt dwarffortress:40.24
+    docker run  -v <path to init.txt>:/df_linux/data/init/init.txt dwarffortress:40.24
 
 Known Issues
 ------------
