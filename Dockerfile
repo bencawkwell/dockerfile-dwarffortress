@@ -1,20 +1,21 @@
-FROM ubuntu:precise
+FROM ansible/ubuntu14.04-ansible:stable
 MAINTAINER Ben Cawkwell <bencawkwell@gmail.com>
 
-# Setup
+# Install core
+ENV DFPKGS unzip
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y $DFPKGS
 
-ADD setup.sh /setup.sh
+# Add the ancible playbooks from github
+ADD https://github.com/bencawkwell/ansible-dwaffortress/archive/master.zip /ansible.zip
+RUN unzip /ansible.zip
+RUN ln -s /ansible-dwaffortress-master /ansible
 
-RUN DF_MAJORVERSION=40 DF_MINORVERSION=24 bash -ex /setup.sh
-
-
-VOLUME /home/xpra/.ssh
-
-VOLUME /df_linux/data/save
-# Script that will handle running Dwarf Fortress in xpra if needed
-ADD sshd_config /etc/ssh/sshd_config
-ADD start.sh /start.sh
+# Run each playbook
+RUN cd /ansible && ansible-playbook df_40_20.yml --connection=local
+RUN cd /ansible && ansible-playbook textmode.yml --connection=local
 
 ENV LANG C.UTF-8
-EXPOSE 22
-ENTRYPOINT ["/start.sh"]
+VOLUME ["/df_linux/data/save"]
+
+ENTRYPOINT ["/df_linux/df"]
