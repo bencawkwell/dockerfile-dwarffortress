@@ -12,7 +12,7 @@ RUN unzip /ansible.zip
 RUN ln -s /ansible-dwaffortress-master /ansible
 
 # Run each playbook
-RUN cd /ansible && ansible-playbook df_40_20.yml --connection=local
+RUN cd /ansible && ansible-playbook dwarffortress.yml --connection=local
 RUN cd /ansible && ansible-playbook textmode.yml --connection=local
 
 ENV LANG C.UTF-8
