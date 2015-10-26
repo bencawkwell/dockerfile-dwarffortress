@@ -3,6 +3,11 @@ dockerfile-dwarffortress
 
 Dwarf Fortress in a container. Tested on Mint 17.
 
+Configuring
+-----------
+
+Edit the Dockerfile under the section "Run each playbook" by commenting or uncommenting each line. Hopefully that section is self explanatory.
+
 Building
 --------
 
@@ -17,7 +22,11 @@ Build the image and tag it dwarffortress.
 Running
 -------
 
-    docker run -t -i dwarffortress
+Assuming you chose to build with noVNC enabled:
+
+    docker run -t -i  -p 6080:6080 dwarffortress
+
+If you also included dfhack then the dfhack console should be right in front of you. You can then access the game by visiting http://localhost:6080/vnc.html in your browser and click "connect" (there is no password).
 
 ### Saved Games ###
 
@@ -33,4 +42,4 @@ Todo
 ----
 
 * Fix sound.
-* Support for print_mode other than TEXT.
+* Perhaps wait for user feedback before starting DF so that you can connect first so you do not miss the awesome intro!

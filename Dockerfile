@@ -13,9 +13,18 @@ RUN ln -s /ansible-dwaffortress-master /ansible
 
 # Run each playbook
 RUN cd /ansible && ansible-playbook dwarffortress.yml --connection=local
-RUN cd /ansible && ansible-playbook textmode.yml --connection=local
+# Comment the line below if you do not want dfhack
+RUN cd /ansible && ansible-playbook dfhack.yml --connection=local
+# Switch between 2D mode using noVNC (control via a browser) or TEXT mode (in the console)
+RUN cd /ansible && ansible-playbook novnc.yml --connection=local
+#RUN cd /ansible && ansible-playbook textmode.yml --connection=local
+
+# Add scripts
+ADD https://github.com/bencawkwell/supervisor-tools/raw/master/wait-for-daemons.sh /wait-for-daemons.sh
+ADD start.sh /start.sh
+RUN chmod +x /wait-for-daemons.sh /start.sh
 
 ENV LANG C.UTF-8
 VOLUME ["/df_linux/data/save"]
 
-ENTRYPOINT ["/df_linux/df"]
+ENTRYPOINT ["/start.sh"]
