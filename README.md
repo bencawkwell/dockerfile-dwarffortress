@@ -24,7 +24,7 @@ Running
 
 Assuming you chose to build with noVNC enabled:
 
-    docker run -t -i  -p 6080:6080 dwarffortress
+    docker run -t -i -p 6080:6080 dwarffortress
 
 If you also included dfhack then the dfhack console should be right in front of you. You can then access the game by visiting http://localhost:6080/vnc.html in your browser and click "connect" (there is no password).
 
@@ -37,6 +37,22 @@ The easiest way to keep your saved games between container restarts is to use do
     docker run -i -t -v /tmp/save/:/df_linux/data/save/ dwarffortress
 
 Remember to make the directory readable and ensure it has plenty of disk space, since there is a known issue in Dwarf Fortress that it will pretend to save successfully even if it has not.
+
+### Saved Games and changing tile set ###
+
+Assuming you use volume mapping to store saved games, you may choose to rebuild the container with a different tile set configured. After you have rebuilt you will need to trigger an update to your saved files:
+
+    docker run -i -t -v /tmp/save/:/df_linux/data/save/ dwarffortress --update-saves
+
+### Launch options ###
+
+Some settings in init.txt can be changed by passing options, for example to skip the intro:
+
+    docker run -t -i dwarffortress --skip-intro
+
+To see the full list of possible options:
+
+    docker run -t -i dwarffortress --help
 
 Todo
 ----

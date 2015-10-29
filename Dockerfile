@@ -6,7 +6,7 @@ ENV DFPKGS unzip
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y $DFPKGS
 
-# Add the ancible playbooks from github
+# Add the ansible playbooks from github
 ADD https://github.com/bencawkwell/ansible-dwaffortress/archive/master.zip /ansible.zip
 RUN unzip /ansible.zip
 RUN ln -s /ansible-dwaffortress-master /ansible

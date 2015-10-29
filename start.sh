@@ -5,4 +5,4 @@ if [ -e "/usr/bin/supervisord" ] ; then
     /wait-for-daemons.sh -a
 fi
 
-DISPLAY=:1 dwarffortress
+DISPLAY=:1 dwarffortress "$@"
