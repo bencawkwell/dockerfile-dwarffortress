@@ -13,8 +13,12 @@ RUN ln -s /ansible-dwaffortress-master /ansible
 
 # Run each playbook
 RUN cd /ansible && ansible-playbook dwarffortress.yml --connection=local
+
 # Comment the line below if you do not want dfhack
 RUN cd /ansible && ansible-playbook dfhack.yml --connection=local
+
+# Uncomment the line below if you want to use the Phoebus tile set
+#RUN cd /ansible && ansible-playbook tileset-phoebus.yml --connection=local
 
 # Only pick ONE of the following display options:
 
