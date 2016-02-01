@@ -24,6 +24,16 @@ Running
 
 There are a few options, which depend on which playbooks have been uncommented in the Dockerfile:
 
+### X11 ###
+
+Run in the X session on the host. Before using this method you may need to run the following on the host to permit access to the X session from within a docker container:
+
+    xhost +local:docker
+
+To start dwarf fortress in the container with sound on your hosts display:
+
+    docker run -t -i -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/snd:/dev/snd --lxc-conf='lxc.cgroup.devices.allow = c 116:* rwm' dwarffortress
+
 ### noVNC ###
 
 This allows you to connect and control Dwarf Fortress using a web browser. Since it requires a specific port you would run the container using the command:
