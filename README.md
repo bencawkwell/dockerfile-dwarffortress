@@ -57,7 +57,7 @@ Since XPRA uses SSH, you need to bind port 22 to the host, so run the docker con
 
 If you included dfhack then the dfhack console will appear. You can use xpra to connect using the command:
 
-    xpra attach --encoding=rgb --ssh="ssh -p 2222" ssh:df@localhost:1
+    xpra attach --encoding=rgb --ssh="ssh -p 2222" ssh:df@localhost:100
 
 The password is "changeme".
 
