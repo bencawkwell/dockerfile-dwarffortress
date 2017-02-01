@@ -91,6 +91,16 @@ To see the full list of possible options:
 
     docker run -t -i dwarffortress --help
 
+Troubleshooting
+---------------
+### setarch: i386: Unrecognized architecture when running container ###
+
+If you happen to be running docker with seccomp enabled, then docker prohibits some system calls that are unfortunately required. The simplest workaround is to run docker without the default seccomp security profile:
+
+    docker run -t -i --security-opt seccomp=unconfined dwarffortress
+
+More information about seccomp security profiles for docker can be found at: https://docs.docker.com/engine/security/seccomp/#/passing-a-profile-for-a-container
+
 Todo
 ----
 
